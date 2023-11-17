@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:festa_task/core/config/routes/app_routes.dart';
 import 'package:festa_task/core/utils/widgets/custom_snackbar.dart';
 import 'package:festa_task/features/auth/presentation/provider/auth_provider.dart';
@@ -35,10 +37,11 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    final isTab = size.width > 800.0;
     return Container(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(25.0),
       height: size.height * .4,
-      width: size.width * .8,
+      width: isTab ? size.width * .35 : size.width * .75,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30.0),
@@ -49,7 +52,9 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             // Heading
-            Text("Login", style: AppFont.headingSemiBoldLarge(color: AppColors.primaryColor)),
+            Text("Login",
+                style: AppFont.headingSemiBoldLarge(
+                    color: AppColors.primaryColor)),
             // Email
             AuthTextField(
               textFieldKey: "email",
@@ -74,7 +79,9 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
                   onSaved: (value) => _password = value.toString().trim(),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      obscure ? Icons.visibility_rounded : Icons.visibility_off_rounded,
+                      obscure
+                          ? Icons.visibility_rounded
+                          : Icons.visibility_off_rounded,
                       color: AppColors.primaryColor,
                     ),
                     onPressed: () {
@@ -93,13 +100,14 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
               builder: (ctx, loading, child) {
                 return AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  transitionBuilder: (Widget child, Animation<double> animation) {
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
                     return ScaleTransition(scale: animation, child: child);
                   },
                   switchInCurve: Curves.easeIn,
                   switchOutCurve: Curves.easeOut,
                   child: SizedBox(
-                    width: size.width * .6,
+                    width: isTab ? size.width * .25 : size.width * .6,
                     child: AppButton(
                       onPressed: loading
                           ? null
@@ -109,14 +117,18 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
                                 FocusScope.of(context).unfocus();
                                 _loading.value = true;
                                 HapticFeedback.mediumImpact();
-                                Provider.of<AuthProvider>(context, listen: false)
+                                Provider.of<AuthProvider>(context,
+                                        listen: false)
                                     .login(email: _email, password: _password)
                                     .then((value) {
                                   if (value.isLeft) {
                                     _loading.value = false;
-                                    CustomSnackBar.showErrorSnackBar(context, value.left.message);
+                                    CustomSnackBar.showErrorSnackBar(
+                                        context, value.left.message);
                                   } else {
-                                    Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                            AppRoutes.home, (route) => false);
                                   }
                                 });
                               }
@@ -132,7 +144,7 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
               valueListenable: _loading,
               builder: (ctx, loading, child) {
                 return SizedBox(
-                  width: size.width * .6,
+                  width: isTab ? size.width * .25 : size.width * .6,
                   child: OutlinedButton.icon(
                     onPressed: loading
                         ? null

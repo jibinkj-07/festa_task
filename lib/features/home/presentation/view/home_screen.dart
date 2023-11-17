@@ -33,36 +33,67 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isTab = MediaQuery.sizeOf(context).width > 800.0;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.dashboard_rounded),
-              color: Colors.white,
-              onPressed: () => Scaffold.of(context).openDrawer(),
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            );
-          },
-        ),
-        actions: [
-          FilterAction(filter: _filter),
-        ],
-      ),
+      appBar: isTab
+          ? null
+          : AppBar(
+              backgroundColor: AppColors.primaryColor,
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: const Icon(Icons.dashboard_rounded),
+                    color: Colors.white,
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip,
+                  );
+                },
+              ),
+              actions: [
+                FilterAction(filter: _filter,isTab: isTab,),
+              ],
+            ),
       body: ValueListenableBuilder(
           valueListenable: _error,
           builder: (ctx, error, child) {
-            if (error.isNotEmpty) {
-              return ErrorScreen(error: error, onRetry: _getUsers);
-            }
-
-            return Consumer<HomeProvider>(builder: (ctx1, homeProvider, _) {
-              return UsersList(users: homeProvider.users);
-            });
+            return Row(
+              children: [
+                if (isTab) Profile(isTab: isTab),
+                Expanded(
+                  child: error.isNotEmpty
+                      ? ErrorScreen(error: error, onRetry: _getUsers)
+                      : Consumer<HomeProvider>(
+                          builder: (ctx1, homeProvider, _) {
+                          return SafeArea(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                if (isTab)
+                                  Container(
+                                    width:150.0,
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: FilterAction(
+                                      filter: _filter,
+                                      isTab: isTab,
+                                    ),
+                                  ),
+                                Expanded(
+                                  child: UsersList(
+                                    users: homeProvider.users,
+                                    isTab: isTab,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                )
+              ],
+            );
           }),
       drawerEnableOpenDragGesture: false,
-      drawer: Profile(),
+      drawer: isTab ? null : Profile(isTab: isTab),
     );
   }
 
@@ -71,7 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     homeProvider.getUsers(gender: "", count: 50).then((value) {
-      if (value.isLeft) _error.value = value.left.message; // updating to build error screen ui
+      if (value.isLeft)
+        _error.value = value.left.message; // updating to build error screen ui
     });
   }
 }

@@ -10,7 +10,9 @@ import '../../../../core/utils/widgets/custom_snackbar.dart';
 import '../../../auth/presentation/provider/auth_provider.dart';
 
 class Profile extends StatelessWidget {
-  Profile({Key? key}) : super(key: key);
+  final bool isTab;
+
+  Profile({Key? key, required this.isTab}) : super(key: key);
 
   final ValueNotifier<bool> _signingOut = ValueNotifier(false);
 
@@ -20,8 +22,8 @@ class Profile extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          width: double.infinity,
-          padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
+          width: isTab ? size.width * .33 : double.infinity,
+          padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top,left: 15.0),
           color: AppColors.primaryColor,
           child: Consumer<AuthProvider>(builder: (ctx, authProvider, _) {
             final user = authProvider.authUser;
@@ -33,17 +35,20 @@ class Profile extends StatelessWidget {
               children: [
                 // Image
                 Container(
-                  height: size.width * .55,
-                  width: size.width * .55,
+                  height: isTab ? size.width * .2 : size.width * .55,
+                  width: isTab ? size.width * .2 : size.width * .55,
                   padding: const EdgeInsets.all(8.0),
-                  decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                  decoration: const BoxDecoration(
+                      color: Colors.white, shape: BoxShape.circle),
                   clipBehavior: Clip.hardEdge,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(500.0),
                     child: CachedNetworkImage(
                       imageUrl: user.imageUrl,
                       fit: BoxFit.cover,
-                      progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
                         value: downloadProgress.progress,
                         color: AppColors.primaryColor,
                       ),
@@ -86,19 +91,26 @@ class Profile extends StatelessWidget {
                             ? null
                             : () {
                                 _signingOut.value = true;
-                                Provider.of<AuthProvider>(context, listen: false).signOut().then((value) {
+                                Provider.of<AuthProvider>(context,
+                                        listen: false)
+                                    .signOut()
+                                    .then((value) {
                                   if (value.isLeft) {
                                     _signingOut.value = false;
-                                    CustomSnackBar.showErrorSnackBar(context, value.left.message);
+                                    CustomSnackBar.showErrorSnackBar(
+                                        context, value.left.message);
                                   } else {
-                                    Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                            AppRoutes.login, (route) => false);
                                   }
                                 });
                               },
                         disabledColor: Colors.white,
                         child: Text(
                           signingOut ? "LOGGING OUT" : "LOG OUT",
-                          style: AppFont.headingSmall(color: AppColors.primaryColor),
+                          style: AppFont.headingSmall(
+                              color: AppColors.primaryColor),
                         ),
                       );
                     }),
@@ -106,15 +118,16 @@ class Profile extends StatelessWidget {
             );
           }),
         ),
-        Positioned(
-          top: size.height*.05,
-          left: 10.0,
-          child: IconButton(
-            onPressed: () =>Navigator.pop(context),
-            icon: const Icon(Icons.close_rounded),
-            color: Colors.white,
+        if (!isTab)
+          Positioned(
+            top: size.height * .05,
+            left: 10.0,
+            child: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.close_rounded),
+              color: Colors.white,
+            ),
           ),
-        ),
       ],
     );
   }

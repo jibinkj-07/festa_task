@@ -28,13 +28,12 @@ class UserInfoSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(10.0),
       child: DefaultTabController(
         length: 5,
         child: Column(
           children: [
-            SizedBox(
-              height: size.height * .08,
+            Expanded(
               child: TabBarView(
                 children: List.generate(
                   _headings.length,
