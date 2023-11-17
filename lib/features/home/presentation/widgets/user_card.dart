@@ -8,8 +8,7 @@ class UserCard extends StatelessWidget {
   final UserEntity user;
   final bool isTab;
 
-  const UserCard({Key? key, required this.user, required this.isTab})
-      : super(key: key);
+  const UserCard({Key? key, required this.user, required this.isTab}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +16,12 @@ class UserCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(15.0),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
-          border: Border.all(
-            width: 1.0,
-            color: Colors.grey,
-          )),
+        borderRadius: BorderRadius.circular(15.0),
+        border: Border.all(
+          width: 1.0,
+          color: Colors.grey,
+        ),
+      ),
       child: Column(
         children: [
           Expanded(
@@ -37,8 +37,7 @@ class UserCard extends StatelessWidget {
                       width: size.width,
                       height: size.height * .11,
                       decoration: const BoxDecoration(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(13.0)),
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(13.0)),
                         color: AppColors.primaryColor,
                       ),
                     ),
@@ -47,17 +46,14 @@ class UserCard extends StatelessWidget {
                     height: isTab ? size.width * .1 : size.width * .3,
                     width: isTab ? size.width * .1 : size.width * .3,
                     padding: const EdgeInsets.all(5.0),
-                    decoration: const BoxDecoration(
-                        color: AppColors.primaryColor, shape: BoxShape.circle),
+                    decoration: const BoxDecoration(color: AppColors.primaryColor, shape: BoxShape.circle),
                     clipBehavior: Clip.hardEdge,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(500.0),
                       child: CachedNetworkImage(
                         imageUrl: user.imageUrl,
                         fit: BoxFit.cover,
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
+                        progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(
                           value: downloadProgress.progress,
                           color: AppColors.primaryColor,
                         ),

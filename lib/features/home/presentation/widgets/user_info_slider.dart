@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/utils/constants/app_colors.dart';
 import '../../../../core/utils/styles/app_font.dart';
 import '../../../common/domain/entity/user_entity.dart';
@@ -26,7 +25,6 @@ class UserInfoSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: DefaultTabController(
@@ -55,15 +53,13 @@ class UserInfoSlider extends StatelessWidget {
   Widget _infoWidget({required String heading, required String info}) {
     return Column(
       children: [
-        Text(
-          heading,
-          style: AppFont.bodyTextLarge(color: Colors.grey),
-        ),
+        Text(heading, style: AppFont.bodyTextLarge(color: Colors.grey)),
         Expanded(
           child: Text(
             info,
             style: AppFont.headingMedium(color: AppColors.primaryColor),
             textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],

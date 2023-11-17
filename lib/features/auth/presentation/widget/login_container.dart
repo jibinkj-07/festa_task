@@ -52,9 +52,7 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             // Heading
-            Text("Login",
-                style: AppFont.headingSemiBoldLarge(
-                    color: AppColors.primaryColor)),
+            Text("Login", style: AppFont.headingSemiBoldLarge(color: AppColors.primaryColor)),
             // Email
             AuthTextField(
               textFieldKey: "email",
@@ -79,16 +77,14 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
                   onSaved: (value) => _password = value.toString().trim(),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      obscure
-                          ? Icons.visibility_rounded
-                          : Icons.visibility_off_rounded,
+                      obscure ? Icons.visibility_rounded : Icons.visibility_off_rounded,
                       color: AppColors.primaryColor,
                     ),
                     onPressed: () {
                       _isObscure.value = !_isObscure.value;
                     },
                   ),
-                  hintText: 'Password',
+                  hintText: 'password',
                   inputAction: TextInputAction.done,
                   textCapitalization: TextCapitalization.none,
                 );
@@ -100,8 +96,7 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
               builder: (ctx, loading, child) {
                 return AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) {
+                  transitionBuilder: (Widget child, Animation<double> animation) {
                     return ScaleTransition(scale: animation, child: child);
                   },
                   switchInCurve: Curves.easeIn,
@@ -117,18 +112,14 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
                                 FocusScope.of(context).unfocus();
                                 _loading.value = true;
                                 HapticFeedback.mediumImpact();
-                                Provider.of<AuthProvider>(context,
-                                        listen: false)
+                                Provider.of<AuthProvider>(context, listen: false)
                                     .login(email: _email, password: _password)
                                     .then((value) {
                                   if (value.isLeft) {
                                     _loading.value = false;
-                                    CustomSnackBar.showErrorSnackBar(
-                                        context, value.left.message);
+                                    CustomSnackBar.showErrorSnackBar(context, value.left.message);
                                   } else {
-                                    Navigator.of(context)
-                                        .pushNamedAndRemoveUntil(
-                                            AppRoutes.home, (route) => false);
+                                    Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
                                   }
                                 });
                               }
@@ -146,12 +137,7 @@ class _LoginContainerState extends State<LoginContainer> with ValidationMixin {
                 return SizedBox(
                   width: isTab ? size.width * .25 : size.width * .6,
                   child: OutlinedButton.icon(
-                    onPressed: loading
-                        ? null
-                        : () => CustomSnackBar.showInfoSnackBar(
-                              context,
-                              "Currently unavailable",
-                            ),
+                    onPressed: loading ? null : () => CustomSnackBar.showInfoSnackBar(context, "Currently unavailable"),
                     icon: SvgPicture.asset(
                       "assets/svg/google.svg",
                       width: 20.0,
