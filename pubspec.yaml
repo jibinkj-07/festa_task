@@ -1,0 +1,41 @@
+name: festa_task
+description: A new Flutter project.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  get_it: ^7.6.4 #dependency injection helper
+  http: ^1.1.0 #dependency for api fetching
+  internet_connection_checker: ^1.0.0+1 #dependency for internet connection checking
+  either_dart: ^1.0.0 #dependency for error handling
+  provider: ^6.0.5 #dependency for state management
+  flutter_svg: ^2.0.9 #dependency for svg support
+  shared_preferences: ^2.2.2 #dependency for local storage
+  cached_network_image: ^3.3.0 #dependency for cached image service
+  shimmer: ^3.0.0 #dependency for loading animation
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/svg/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/font/Poppins-Regular.ttf
+        - asset: assets/font/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/font/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/font/Poppins-Bold.ttf
+          weight: 700
